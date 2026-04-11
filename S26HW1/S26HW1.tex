@@ -1,0 +1,51 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#1 -- Due 11:59pm, Friday, April 10.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework assignment is loosely based on the Chapter 2 and MATH 342 (linear regression course) material. 
+\item This homework assignment is designed to make sure you know how to manipulate data using R.
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code.
+\item Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for me to see every single observation of the dataset you have used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points.
+\item If the R script file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Note}: This course assumes that you have at least some knowledge and experience of R programming or something similar. If you are not sure how it works, please see the instructor during the office hours. 
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition by James, Witten, Hastie, and Tibshirani.\\
+
+\begin{enumerate}
+\item  \#2.4.2. Note that $n = \mbox{Number of observations}$ and $p = \mbox{Number of explanatory variables}$.\\
+
+\item See S26HW1code.R and answer all the questions from (a) to (i). These questions can be found in the R code, but be sure to present your answers in the PDF file. The dataset is obtained from\\
+\scriptsize
+\url{https://www.kaggle.com/datasets/farazrahman/earthquake}.\\
+
+\normalsize
+\item  \#2.4.8. For (a), do not forget to set {\tt header=TRUE}. Before doing (c) (ii) and (iii), set {\tt college\$Private<-as.factor(college\$Private)}. \\
+\end{enumerate}
+\end{document}
