@@ -1,3 +1,4 @@
+#---------------------------------------------------------------R PROBLEM--------------------------------------------------------------------------
 #Remove previous data
 rm(list=ls())
 par(mfrow = c(1,1))
@@ -23,9 +24,7 @@ class(eq) #This should say "data.frame".
 
 #(a) Keep only the following four columns, and sort them in the alphabetical order:
 #mag, depth, dmin, rms.
-#To do so, use dplyr and read how select() works. 
-#See https://dplyr.tidyverse.org/reference/select.html
-#Then, name this new dataset "eq2".
+
 #If you need to download, install, and use dplyr, uncomment the following lines:
 #install.packages("dplyr")
 library(dplyr)
@@ -89,7 +88,8 @@ cor(eq2, use="pairwise.complete.obs")
 #(d)
 #Write R code and state the locations of the 12 earthquakes with the highest magnitudes.
 #Then, compute the average depth for these 12 earthquakes.
-twelvehigh = eq2 %>% slice_max(mag, n = 12) #from dplyr
+twelvehigh = eq %>% slice_max(mag, n = 12) #from dplyr
+print(twelvehigh[1:12, "place"])
 twelvehigh_mean = mean(twelvehigh$depth)
 
 #(e)
@@ -106,9 +106,9 @@ sqrt_depth <- sqrt(eq2$depth)
 sqrt_depth <- sqrt_depth[!is.nan(sqrt_depth)]
 
 x2 <- seq(min(sqrt_depth), max(sqrt_depth), length=40)
-#fun <- dgamma(x2, rate = 1, shape = 25)
+fun <- dchisq(x2, df=mean(sqrt_depth))
 hist(sqrt_depth, prob = TRUE, breaks = 25)
-#lines(x2, fun, col=2, lwd=2)
+lines(x2, fun, col=2, lwd=2)
 
 #(f)
 #Create a vector of 0's and 1's, where 1's are assigned to the 
@@ -152,5 +152,65 @@ bool <- eq2$dmin <= .05
 #entries of the vector. The sum function then considers all of the "True" entries as 1's and adds
 #them all together.
 
+#---------------------------------------------------------------PROBLEM 2.4.8--------------------------------------------------------------------------
+par(mfrow = c(1,1))
 
+#part a)
+college <- read.csv("college.csv",header=TRUE)
+
+#part b)
+#fix(college)
+rownames(college)=college[,1]
+#fix(college)
+college=college[-1]
+fix(college)
+
+college$Private <- as.factor(college$Private)
+
+#ci)
+summary(college)
+
+#cii)
+pairs(college[,1:10])
+
+#ciii)
+plot(Outstate ~ Private, data = college, main = "Private vs. Not Private Students From Out of State")
+
+#civ)
+Elite = rep("No", nrow(college))
+Elite[college$Top10perc > 50]="Yes"
+Elite = as.factor(Elite)
+college = data.frame(college ,Elite)
+
+summary(college)
+plot(Outstate ~ Elite, data = college, main = "Elite vs Non-Elite Students From Out of State")
+
+#cv)
+par(mfrow = c(2,2))
+hist(college$Grad.Rate, prob=TRUE, breaks = 25, main = "Graduation Rate")
+hist(college$Top10perc, prob=FALSE, breaks = 20, main = "Proportion of top 10%")
+hist(college$Terminal, prob=FALSE, breaks = 20, main = "Proportion of top 25%")
+
+accept_app_rat <- (college$Accept)/(college$Apps)
+hist(accept_app_rat, prob=FALSE, breaks = 20, main = "Acceptance/Applications")
+
+#cvi)
+#Which college had a graduation rate of over 100%?
+wtf_college <- which.max(college$Grad.Rate)
+rownames(college)[wtf_college]
+#do colleges  that have a higher Top10% have a higher grad rate? Top25%?
+par(mfrow = c(1,1))
+top10_grad <- college[,c("Top10perc", "Grad.Rate")]
+plot(top10_grad, main  = "Top10Proportion to Graduation Rate")
+top25_grad <- college[,c("Top25perc", "Grad.Rate")]
+plot(top25_grad, main = "Top25Proportion to Graduation Rate ")
+
+predict_model_25 <- lm(college$Grad.Rate ~ college$Top25perc, data = college)
+predict_model_10 <- lm(college$Grad.Rate ~ college$Top10perc, data = college)
+
+print(predict_model_25)
+print(predict_model_10)
+
+summary(predict_model_25)
+summary(predict_model_10)
 
