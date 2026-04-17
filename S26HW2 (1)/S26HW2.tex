@@ -1,0 +1,73 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#2 -- Due 11:59pm, Friday, April 17.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework assignment is mainly based on the Chapter 5 material. 
+\item This homework assignment is designed to help you understand how to apply cross-validation and bootstrap.
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code. Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for the instructor to see every single observation of the dataset you used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\item If you need an extension, you need to ask for permission before 5pm on the day the homework is due.
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points.
+\item If the R code in the .R file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition by James, Witten, Hastie, and Tibshirani.
+
+\begin{enumerate}
+\item  \#5.4.3 and \#5.4.4 (These two problems are combined together as one problem.) For (a), explain the algorithm using schematic diagram(s). For 5.4.4, answer this question using $k$-fold cross-validation and bootstrap. The answer should contain two parts. In the first part, describe how to choose the best model using $k$-fold cross-validation, assuming that you have multiple candidate models. In the second part, by applying the bootstrap idea to the residuals of the model, estimate the standard deviation of one prediction given a set of values for the explanatory variables.\\
+
+\item Let $x_{\mbox{\tiny U},i}$ and $x_{\mbox{\tiny M},i}$ be the average daily social media usage hours ({\tt usage}) and mental health score ({\tt mental}), respectively, for the $i$-th person, where $i = 1,\ldots, 1705$. Also, let $y_i$ be sleep hours per night. 
+\begin{itemize}
+\item[(a)] Present the scatterplot matrix of ($x_{\mbox{\tiny U},i}$ vs.\ $y_i$), ($x_{\mbox{\tiny M},i}$ vs.\ $y_i$), and ($x_{\mbox{\tiny U},i}$ vs.\ $x_{\mbox{\tiny M},i}$), and describe how these three pairs of variables are related to each other. Also, note irregular patterns, if any.\\
+\item[(b)] Suppose that 
+\begin{eqnarray*}
+y_i = \beta_0 + \beta_1 x_{\mbox{\tiny U},i} + \cdots + \beta_p x_{\mbox{\tiny U},i}^p + \varepsilon_i,
+\end{eqnarray*}
+where $E[\varepsilon_i] = 0$ and $\mbox{Var}(\varepsilon_i) = \sigma^2$.\\
+
+Using the LOOCV, choose an appropriate order $p$ and justify your choice. You may assume that $p \in \{1, 2, \ldots, 10\}$.\\
+\item[(c)] Repeat (b), but use $x_{\mbox{\tiny M},i}$ this time.
+\item[(d)] Using the model you chose in (b), predict $y_i$ assuming that $x_{\mbox{\tiny U},i}$ is equal to its sample median. To obtain a prediction, simply modify: \\
+
+\small
+{\tt predict(model, newdata=data.frame(usage = 0), data = data\_usage)\\}
+\normalsize
+
+appropriately by replacing {\tt model} with an appropriate {\tt glm} model you chose in (b), and {\tt 0} with an appropriate value.\\
+\item[(e)] (No need to report in your answer, but appropriate R code needs to be presented in your R script file). Generate $1000$ bootstrap resamples of {\tt data\_usage} by randomly choosing rows with replacement. Use {\tt sample()} with {\tt replace = TRUE} in the input argument.
+\item[(f)] For each of the $1000$ bootstrap samples you created in (e), obtain a coefficient estimate corresponding to the linear term $\beta_1$ assuming a polynomial model of order $p = 3$. Then, using {\tt quantile()}, calculate the $2.5$-th and $97.5$-th percentile of $\beta_1$ estimates obtained from $1000$ bootstrap samples. That gives a $95\%$ confidence interval for $\beta_1$.
+\end{itemize}
+
+\item  \#5.4.8. However, DO NOT use the {\tt R code} presented in (a). Instead, complete (a)--(f) using the following code.\\
+
+{\tt set.seed(50)\\
+x <- rnorm(100, sd=1)\\
+y <- 2*x-5*x\string^2+0.01*x\string^3+rnorm(100, sd=10)\\}
+
+For (c), use {\tt set.seed(50, sample.kind="Rejection")}. For (d), use {\tt set.seed(4391, sample.kind="Rejection")}. See HW2code.R to complete this problem.
+
+\end{enumerate}
+\end{document}
