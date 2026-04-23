@@ -18,7 +18,7 @@ par(mfrow = c(1,1))
 #The easiest way to do so is to Session -> Set Working Directory -> To Source File Location
 #Alternatively, you may use setwd().
 #setwd('S26HW1')
-eq <- read.csv("all_month.csv",header=TRUE)
+eq <- read.csv("all_month.csv", header=TRUE)
 
 class(eq) #This should say "data.frame".
 
