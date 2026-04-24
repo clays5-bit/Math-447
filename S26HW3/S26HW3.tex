@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#3 -- Due 11:59pm, Friday, April 24.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework assignment is based on Chapter 6 material. 
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code.  Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for the instructor to see every single observation of the dataset you used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\item If you need an extension, you need to ask for permission before 5pm on the day the homework is due.
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points unless otherwise noted.
+\item If the R code in the .R file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition, by James, Witten, Hastie, and Tibshirani.
+
+\begin{enumerate}
+\item (4 points) \#6.8.2 (a) and (b).\\
+
+\item (6 points) Let
+\begin{eqnarray*}
+Q (\lambda)= \sum_{i=1}^n (y_i - \beta_1)^2 +  \sum_{i=n+1}^m (y_i - \beta_2 x_i)^2 + \lambda (\beta_1^2 + \beta_2^2),
+\end{eqnarray*}
+$m > n$, which is a variation of least squares (when $\lambda = 0$) and ridge regression (when $\lambda > 0$) assuming that there exists a ``change point'' after the $n$-th observation.
+
+\begin{enumerate}
+\item Show that the ridge regression solution of $Q(\lambda)$, $\lambda > 0$, for $\beta_1$ is given by $\hat{\beta}_1^R = \frac{\sum_{i=1}^n y_i}{\lambda + n}$. Be sure to show that $\hat{\beta}_1^R$ actually minimizes $Q(\lambda)$.
+\item Show that the ridge regression solution of $Q(\lambda)$, $\lambda > 0$, for $\beta_2$ is given by $\hat{\beta}_2^R = \frac{\sum_{i=n+1}^m x_iy_i}{\lambda + \sum_{i=n+1}^m x_i^2}$. Be sure to show that $\hat{\beta}_2^R$ actually minimizes $Q(\lambda)$.
+\item Based on (b), explain why the ridge regression is a shrinkage method by considering what happens to $\hat{\beta}_1^R$ and $\hat{\beta}_2^R$ as $\lambda \to \infty$.
+\item Derive the least squares estimate of $\beta_1$ and $\beta_2$ using $\hat{\beta}_1^R$ and $\hat{\beta}_2^R$.
+\end{enumerate}
+
+\item \# 6.8.9 (a), (b), (c), (d), and (g). However, do not use the {\tt College} data. Instead, use the {\tt cats} data. The response variable is average width ({\tt avg\_width}) and treat all the other three variables as explanatory variables (predictors). Simply modify the example R code provided in HW3code.R. For (g), compare the test errors (MSEs) and see if you notice any large differences among these three models.
+
+\item Note that the analysis you did in Problem 3 might not be reliable because the result heavily depended on how we split the data. To avoid this problem, we can repeat the process we did in Problem 3 a number of times, and compute the probability that each explanatory variable is selected. In addition, we can get the mean magnitude of the coefficients corresponding to the standardized explanatory variables. In your answer, report the probability that each variable is selected out $1000$ iterations and the mean magnitude of coefficients. Then, rank the importance of the explanatory variables and justify your ranking.\\
+
+\textbf{Remarks}: In your linear regression course, you learned that $p$-value is one of the most important ways of determining the significance of these explanatory variables. However, computing $p$-values is very tricky for the lasso regression, requiring an alternative way to evaluate the significance of the explanatory variables. Problem 4 shows one way of achieving this.
+
+\end{enumerate}
+\end{document}
+
+
+
+
+
+
+

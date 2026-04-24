@@ -3,7 +3,7 @@ rm(list=ls())
 library(dplyr)
 library(boot)
 
-setwd("C:/Users/clays/Documents/GitHub/Math-447/ABS Project")
+#setwd("C:/Users/clays/Documents/GitHub/Math-447/ABS Project")
 
 abs_data <- read.csv("abs-challenges-2026-team-summary.csv", header=TRUE)
 standings_raw <- read.csv("mlb_current_standings.csv", header=TRUE)
