@@ -11,6 +11,7 @@ rm(list=ls())
 #laptop working directory
 #setwd("C:/Users/clays/Documents/GitHub/Math-447/S26HW3")
 #desktop working directory
+setwd("C:/Users/Sean's Desktop/Documents/GitHub/Math-447/S26HW3")
 
 cat_dataset <- read.csv("cats.csv", header=TRUE)
 catdata <- cat_dataset[-c(1,2,7:10)]
