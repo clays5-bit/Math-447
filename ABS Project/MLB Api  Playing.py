@@ -14,4 +14,7 @@ schedule_df = pd.DataFrame(schedule)
 
 schedule_ids = schedule_df['game_id'].to_list()
 
+print(schedule_ids)
+print(len(schedule_ids))
+
 game_data = stp.get('game', {'gamePk': schedule_ids[0]})
