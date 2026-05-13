@@ -1,12 +1,14 @@
 #Function Set For Pulling Data
 
 from pybaseball import statcast
+import statsapi as stp
+
 from datetime import date, timedelta
 import pandas as pd
 import numpy as np
-import statsapi as stp
 
-def pull_full_pitch(data_path, mlb_season_start, last_day):
+
+def pull_full_pitch_statcast(data_path, mlb_season_start, last_day):
     current_data = statcast(start_dt = mlb_season_start, end_dt = last_day)
 
     current_data['challenge'] =  current_data['des'].str.contains(r'(?=.*challenge)(?=.*pitch result)', case=False)
@@ -19,7 +21,13 @@ def pull_full_pitch(data_path, mlb_season_start, last_day):
     current_data = current_data.drop_duplicates()
     current_data.to_csv(data_path, index=False)
 
-def pull_yesterday_pitch(data_path, from_day, last_day):
+def pull_full_pitch_mlb_api(data_path, mlb_season_start, last_day):
+    schedule = stp.schedule(start_date=mlb_season_start, end_date=last_day)
+    schedule_df = pd.DataFrame(schedule)
+    schedule_ids = schedule_df['game_id'].to_list()
+    
+
+def add_yesterday_pitch_statcast(data_path, from_day, last_day):
     current_data = pd.read_csv(data_path)
     previous_day_data = statcast(start_dt = from_day, end_dt = last_day)
 

@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#4 -- Due 11:59pm, Friday, May 8.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework assignment is based on Chapter 4 material. 
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code.  Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for the instructor to see every single observation of the dataset you used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\item If you need an extension, you need to ask for permission before 5pm on the day the homework is due.
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points unless otherwise noted.
+\item If the R code in the .R file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition, by James, Witten, Hastie, and Tibshirani.
+
+\begin{enumerate}
+\item \# 4.7.2. Hint: Think about these two things first. i) Does the denominator matter? ii) What happens when you take the log of the numerator? 
+
+\item \# 4.7.6
+
+\item \# 4.7.11. However, do not use the {\tt Auto} data. Instead, use {\tt dino\_data\_sd} in HW4code.R. Skip (a) and (c) as these parts were already done in the code. For (b), try every predictor and identify the top two predictors which may be useful for classifying the diet (carnivore vs.\ herbivore). For (d), (e), and (f), simply use all the predictor variables in {\tt dino\_data\_sd}. Also, for (d), discuss whether the magnitude(s) of the estimated coefficient(s) are related to the variable(s) you identified in (b). Note that all the predictors are standardized beforehand to ensure that the estimated coefficients can be compared in a fair manner. For (g), report the results as a plot with the misclassification rates on the $y$-axis and $K$ on the $x$-axis for $K = 1, 2, \ldots, 10$, and justify which $K$ seems reasonable.
+\end{enumerate}
+\end{document}

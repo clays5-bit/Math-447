@@ -12,5 +12,5 @@ mlb_2026_start_date =  "2026-03-25"
 start_date = str(date.today()-timedelta(days=2)) 
 end_date = str(date.today()-timedelta(days=1))
 
-bf.pull_full_pitch(data_path, mlb_2026_start_date, end_date)
-#bf.pull_yesterday_pitch(data_path, start_date, end_date)
+bf.pull_full_pitch_statcast(data_path, mlb_2026_start_date, end_date)
+#bf.pull_yesterday_pitch_statcast(data_path, start_date, end_date)
