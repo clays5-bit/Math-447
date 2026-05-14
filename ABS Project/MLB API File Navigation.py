@@ -5,7 +5,7 @@ import numpy as np
 import statsapi as stp
 import json
 
-mlb_2026_start_date =  "2026-03-25"
+mlb_2026_start_date = "2026-03-25"
 
 start_date = str(date.today()-timedelta(days=2)) 
 end_date = str(date.today()-timedelta(days=1))
@@ -26,6 +26,8 @@ for play in allPlays:
         if event.get('isPitch') and event.get('details', {}).get('hasReview'):
             n += 1
             print(n)
+            print(event.get('reviewDetails', {}).keys())
             print(event.get('details', {}).get('hasReview'))
             print(event.get('reviewDetails', {}).get('isOverturned'))
-            print(play.get('matchup', {}))
+            print(event.get('reviewDetails', {}).get('player'))
+            print(event.get('reviewDetails', {}).get('reviewType'))
