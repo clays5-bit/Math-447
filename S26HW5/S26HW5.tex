@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#5 -- Due 11:59pm, Friday, May 22.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework is based on Chapter 10 Part 1 \& Part 2. 
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code.  Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for the instructor to see every single observation of the dataset you used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\item If you need an extension, you need to ask for permission before 5pm on the day the homework is due.
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points.
+\item If the R code in the .R file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition, by James, Witten, Hastie, and Tibshirani.
+
+\begin{enumerate}
+\item Principal component analysis (PCA). Use HW5code.R to answer these questions.
+\begin{itemize}
+\item[(a)] Present a biplot and provide a reasonable interpretation for $\phi_1$ and $\phi_2$ (the first and second principal component loading vector, respectively). It may be helpful to examine the actual values of the loading vectors to understand what they represent.
+\item[(b)] By referring to both the first and second principal component, discuss important characteristics of Observation \#6083.
+\item[(c)] Present a scree plot and plot of the cumulative proportion of variance explained, and decide how many principal components should be used. Be sure to justify your choice.
+\end{itemize}
+
+\item PCA and $K$-means clustering. When answering these questions, modify HW5code.R appropriately.
+\begin{itemize}
+\item[(a)] Interpret $\phi_1$, $\phi_2$, and $\phi_3$ (the first, second, and third principal component loading vector, respectively). It may be helpful to examine the actual values of the loading vectors to understand what they represent.
+\item[(b)] Perform $K$-means clustering on $(Z1, Z2, Z3)$ using $K = 2$ and $K = 3$. Then, plot the results in three scatterplots $(Z_1, Z_2)$, $(Z_1, Z_3)$, and $(Z_2, Z_3)$ separately, and present them in your answer. Each cluster should be represented using different colors. Moreover, present the $K$ clusters as a 3D scatterplot as well. In total, you should present $3 \times 2 + 2= 8$ plots. Then, justify whether $K = 2$ or $K = 3$ is more reasonable.
+\item[(c)] Using $K = 3$, interpret each cluster.
+\end{itemize}
+
+\item \# 10.7.3. For (a), use {\tt plot()}. Skip (b). Use {\tt label <- c(2,1,1,2,1,2)} for (c). \\
+
+\end{enumerate}
+\end{document}

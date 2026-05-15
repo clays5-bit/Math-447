@@ -212,7 +212,7 @@ def update_pitch_file_mlb_api(data_path):
     
     old_data = pd.read_csv(data_path)
 
-    last_day = date.strptime(old_data['date'].iloc[-1], '%Y-%m-%d')
+    last_day = date.strptime(old_data['date'].iloc[-1], '%m/%d/%Y')
     start_day = str(last_day+timedelta(days=1))
 
     new_data = pull_pitch_mlb_api(data_path, start_day, end_day)
