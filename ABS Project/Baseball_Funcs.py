@@ -96,12 +96,36 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
             topInning = play.get('about', {}).get('isTopInning')
 
             balls = 0
-            strikes = 0
+            strikes = 0        
 
             for event in play["playEvents"]:
-                if event.get("isPitch"): #and event.get('details', {}).get('hasReview')
-                    print(n)
+                if event.get("isPitch"): #and event.get('details', {}).get('hasReview') #REMOVE
                     n += 1
+                    print(n)
+                        
+                    description = event["details"].get('description')
+                    if ("Strike" in description) or (("Foul" in description) and (strikes < 2)):
+                        strike = True
+                        ball = False
+                    elif "Ball" in description:
+                        strike = False
+                        ball = True 
+                    else:
+                        strike = False
+                        ball = False
+
+                    if event["details"].get('hasReview') and not event["details"].get('isOverturned'):
+                        if strike:
+                            balls += 1
+                        elif ball:
+                            strikes += 1
+
+                    elif strike or ball:
+                        if strike:
+                            strikes += 1
+                        elif ball:
+                            balls += 1
+
                     row = {
                         "date": offDate,
                         "batting_team": batting_team1,
@@ -182,8 +206,6 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                     rows.append(row)
                     balls = event["count"].get('balls')
                     strikes = event["count"].get('strikes')
-                    balls = balls
-                    strikes = strikes
 
                     awayTeamRuns = play.get('result', {}).get('awayScore')
                     homeTeamRuns = play.get('result', {}).get('homeScore')
