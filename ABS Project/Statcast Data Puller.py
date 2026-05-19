@@ -19,5 +19,5 @@ mlb_2026_start_date =  "2026-03-25"
 start_date = str(date.today()-timedelta(days=2))
 end_date = str(date.today()-timedelta(days=1))
 
-bf.pull_pitch_mlb_api(data_path_lap2, start_date, end_date)
+bf.pull_pitch_mlb_api(data_path_desk1, mlb_2026_start_date, end_date)
 #bf.update_pitch_file_mlb_api(data_path_lap2)

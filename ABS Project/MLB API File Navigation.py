@@ -27,7 +27,8 @@ for play in allPlays:
             n += 1
             print(n)
             print(event.get('reviewDetails', {}).keys())
+            print(event.get('reviewDetails', {}).get('challengeTeamId'))
+            print(event.get('reviewDetails', {}).get('reviewType'))
             print(event.get('details', {}).get('hasReview'))
             print(event.get('reviewDetails', {}).get('isOverturned'))
-            print(event.get('reviewDetails', {}).get('player'))
-            print(event.get('reviewDetails', {}).get('reviewType'))
+            print(event.get('reviewDetails', {}).get('player', {}).get('id'))

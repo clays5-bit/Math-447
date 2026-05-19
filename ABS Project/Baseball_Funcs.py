@@ -87,10 +87,14 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
 
             if play.get('about').get('isTopInning'):
                 batting_team1 = data.get('gameData').get('teams').get('away').get('name')
+                batting_team1id = data.get('gameData').get('teams').get('away').get('id')
                 pitching_team1 = data.get('gameData').get('teams').get('home').get('name')
+                pitching_team1id = data.get('gameData').get('teams').get('home').get('id')
             else:
                 batting_team1 = data.get('gameData').get('teams').get('home').get('name')
+                batting_team1id = data.get('gameData').get('teams').get('home').get('id')
                 pitching_team1 = data.get('gameData').get('teams').get('away').get('name')
+                pitching_team1id = data.get('gameData').get('teams').get('away').get('id')
         
             inning = play.get('about', {}).get('inning')
             topInning = play.get('about', {}).get('isTopInning')
@@ -102,7 +106,18 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                 if event.get("isPitch"): #and event.get('details', {}).get('hasReview') #REMOVE
                     n += 1
                     print(n)
-                        
+                    
+                    if event["details"].get('hasReview'):
+                        if event.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
+                            challenge_batting = True
+                            challenge_fielding = False
+                        else:
+                            challenge_batting = False
+                            challenge_fielding = True
+                    else:
+                        challenge_batting = False
+                        challenge_fielding = False
+
                     description = event["details"].get('description')
                     if ("Strike" in description) or (("Foul" in description) and (strikes < 2)):
                         strike = True
@@ -114,7 +129,13 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         strike = False
                         ball = False
 
-                    if event["details"].get('hasReview') and not event["details"].get('isOverturned'):
+                    if (event["details"].get('hasReview')) and (not event.get('reviewDetails', {}).get('isOverturned')):
+                        if strike:
+                            strikes += 1
+                        elif ball:
+                            balls += 1
+
+                    elif (event["details"].get('hasReview')) and (event.get('reviewDetails', {}).get('isOverturned')):
                         if strike:
                             balls += 1
                         elif ball:
@@ -129,10 +150,12 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                     row = {
                         "date": offDate,
                         "batting_team": batting_team1,
+                        "batting_team_id": batting_team1id,
                         "batter_id": play.get('matchup', {}).get('batter', {}).get('id'),
                         "batter_name": play.get('matchup', {}).get('batter', {}).get('fullName'),
 
                         "pitching_team": pitching_team1,
+                        "pitching_team_id": pitching_team1id,
                         "pitcher_id": play.get('matchup', {}).get('pitcher', {}).get('id'),
                         "pitcher_name": play.get('matchup', {}).get('pitcher', {}).get('fullName'),
 
@@ -177,6 +200,8 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         "pitchTypeDescription": event["details"].get('type', {}).get('description'),
                         "hasReview": event["details"].get('hasReview'),
                         "isOverturned": event.get('reviewDetails', {}).get('isOverturned'),
+                        "batter_challenge": challenge_batting,
+                        "fielder_challenge": challenge_fielding,
 
                         #in the pitchData section
                         "startSpeed": event["pitchData"].get('startSpeed'),
