@@ -76,9 +76,17 @@ Knum = 3 #this is for K=3. Change this value as necessary.
 km.out = kmeans(prx, Knum, nstart=20) 
 
 #Visualizing clusters. Repeat this for 1 vs 3 and 2 vs 3.
-plot(prx[,c(1,2)], col=(km.out$cluster), 
+plot(prx[,c(1,2)], col=(km.out$cluster),
      main="K-Means Results with K=3", 
      xlab="Z1", ylab="Z2", pch=20, cex=2) #modify xlab and ylab appropriately.
+
+plot(prx[,c(1,3)], col=(km.out$cluster), 
+     main="K-Means Results with K=3", 
+     xlab="Z1", ylab="Z3", pch=20, cex=2) #modify xlab and ylab appropriately.
+
+plot(prx[,c(2,3)], col=(km.out$cluster), 
+     main="K-Means Results with K=3", 
+     xlab="Z2", ylab="Z3", pch=20, cex=2) #modify xlab and ylab appropriately.
 
 #3D scatterplot using plotly.
 #See https://plotly.com/r/3d-scatter-plots/
@@ -95,5 +103,42 @@ fig <- fig %>% layout(scene = list(xaxis = list(title = 'PC1'),
                                    yaxis = list(title = 'PC2'),
                                    zaxis = list(title = 'PC3')))
 fig
+
+
+#K=2
+duo = c(1,2,3)
+prx = pr.out$x[,duo]
+Knum2 = 2 #Switched to K = 2
+km.out2 = kmeans(prx, Knum2, nstart=20) 
+
+#Visualizing clusters. Repeat this for 1 vs 3 and 2 vs 3.
+plot(prx[,c(1,2)], col=(km.out2$cluster),
+     main="K-Means Results with K=3", 
+     xlab="Z1", ylab="Z2", pch=20, cex=2) #modify xlab and ylab appropriately.
+
+plot(prx[,c(1,3)], col=(km.out2$cluster), 
+     main="K-Means Results with K=3", 
+     xlab="Z1", ylab="Z3", pch=20, cex=2) #modify xlab and ylab appropriately.
+
+plot(prx[,c(2,3)], col=(km.out2$cluster), 
+     main="K-Means Results with K=3", 
+     xlab="Z2", ylab="Z3", pch=20, cex=2) #modify xlab and ylab appropriately.
+
+prx <- data.frame(prx)
+prx$cols <- as.factor(km.out2$cluster)
+
+#Knum = 2.
+fig <- plot_ly(prx, x = ~PC1, y = ~PC2, z = ~PC3, color = ~cols, 
+               colors = c("black", "red"))
+fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene = list(xaxis = list(title = 'PC1'),
+                                   yaxis = list(title = 'PC2'),
+                                   zaxis = list(title = 'PC3')))
+fig
+#-------------------------------------------------------------------------------
+#Problem 10.7.3
+knum = 2
+x_1 = c(1,1,0,5,6,4)
+x_2 = c(4,3,4,1,2,0)
 
 
