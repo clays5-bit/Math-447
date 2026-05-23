@@ -140,5 +140,22 @@ fig
 knum = 2
 x_1 = c(1,1,0,5,6,4)
 x_2 = c(4,3,4,1,2,0)
+x = cbind(x_1, x_2)
+label = c(2,1,1,2,1,2)
 
+plot(x = x_1, y = x_2, main = 'X1 vs X2')
+
+df = data.frame(Label = label, X1 = x_1, X2 = x_2)
+
+Cent1 = colMeans(df[label == 1, c("X1", "X2")])
+Cent2 = colMeans(df[label == 2, c("X1", "X2")])
+
+Cent1Dist <- sqrt((Cent1[1]-x_1)^2+(Cent1[2]-x_2)^2)
+Cent2Dist <- sqrt((Cent2[1]-x_1)^2+(Cent2[2]-x_2)^2)
+
+label <- ifelse(Cent1Dist < Cent2Dist, 1, 2)
+
+colors = ifelse(label == '1', 'blue', 'green')
+
+plot(x = x_1, y = x_2, col = colors, main = 'X1 vs X2')
 
