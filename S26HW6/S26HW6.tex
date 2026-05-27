@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\parindent 0.0in
+\parskip 0.1in
+\pagestyle{empty}
+\def\R{\mbox{I}\negthinspace \mbox{R}}
+\topmargin -.5in
+\textheight 8.0in
+\textwidth 6.0in
+\oddsidemargin 0.2in
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}}
+
+\begin{center}{\bf Homework Set \#6 -- Due 11:59pm, Friday, May 29.} \\ {\sc MATH 447 Spring 2026}\end{center}
+\textbf{Note}: 
+\begin{itemize}
+\item This homework is based on Chapter 10 Part 3 and PCA. 
+\item For your convenience, all the data files and the .tex file for this problem are included.
+\item Your need to submit two files: A PDF file which contains all the answers and an R script file (with an ``.R'' extension) containing all the code.  Any answers presented in the R script file only will not be graded.
+\item Your answers must be presented in the same order as the problems given in this assignment, including all graphs and {\tt R} outputs, if applicable (i.e., the graphs and outputs must be in the same order and must not be relegated to the back of your assignment). 
+\item Use your judgment to include an appropriate amount of {\tt R} code and output in your answers as necessary. For example, it is not necessary for the instructor to see every single observation of the dataset you used.
+\item All the {\tt R} code must be well documented and submitted as a single R script file (which has the ``.R'' extension) to Canvas. 
+\item If you need an extension, you need to ask for permission before 5pm on the day the homework is due.
+\end{itemize}
+
+The grading scheme is as follows:
+\begin{itemize}
+\item This homework assignment will be graded out of $30$ points.
+\item Each problem will be graded out of $10$ points.
+\item If the R code in the .R file is missing or incomplete, at most $5$ points will be deducted.
+\end{itemize}
+
+\textbf{Textbook Problems}: Refer to \textit{An Introduction to Statistical Learning with Applications in R}, First Edition, by James, Witten, Hastie, and Tibshirani.
+
+\begin{enumerate}
+\item Let us analyze the 2023-2024 NBA Player Stats (Playoffs) data. See HW6code.R for the description of explanatory variables.
+\begin{itemize}
+\item[(a)] Present a biplot in your answer and provide a reasonable interpretation for $\phi_1$ and $\phi_2$ (the first and second principal component loading vector, respectively). 
+\item[(b)] Examine the biplot and interpret Player \#93 (LeBron James) according to (a). 
+\item[(c)] Present a scree plot and plot of the cumulative proportion of variance explained, and decide how many principal components should be used based on the plot of the cumulative proportion of variance explained. Be sure to justify your answer.
+\end{itemize}
+
+\item Hierarchical clustering. Again, use the 2023-2024 NBA Player Stats (Playoffs) data.
+\begin{itemize}
+\item[(a)] By following \textit{10.5.2 Hierarchical Clustering} in the textbook, present three dendrograms using complete, average, and single linkage based on the first and second principal component scores. Simply use {\tt NBA\_scores12} at the bottom of HW6code.R and follow 10.5.2 to generate dendrograms.
+\item[(b)] Using the complete linkage, present the cluster labels for each observation. Use {\tt cutree(hc.complete, 5)}.
+\item[(c)] Present a scatterplot of the first and second principal component scores where each point is colored by cluster obtained in 2(b). To create the scatterplot, see\\
+\tiny
+\url{https://www.tutorialspoint.com/how-to-create-a-scatterplot-with-colors-of-the-group-of-points-in-r}
+\normalsize
+\item[(d)] Interpret these five clusters carefully based on your interpretation of $\phi_1$ and $\phi_2$. Make sure to use both PC1 and PC2 to describe the clusters.
+\item[(e)]  Discuss whether or not each of these five clusters is related to position(s) by examining {\tt table(cutree(hc.complete, 5), NBA\_pos)}. 
+\end{itemize} 
+
+\item Suppose that we perform hierarchical clustering on a certain dataset using the average linkage and complete linkage. Assume that we have two dendrograms, one based on the average linkage and the other based on the complete linkage. Using the average linkage, the clusters $\{(x_1, y_1), (x_2, y_2), (x_3, y_3)\}$ and $\{(x_4, y_4), (x_5, y_5), (x_6, y_6)\}$ fuse at a certain point in the dendrogram. Similarly, using the complete linkage, the clusters $\{(x_1, y_1), (x_2, y_2), (x_3, y_3)\}$ and $\{(x_4, y_4), (x_5, y_5), (x_6, y_6)\}$ also fuse at a certain point. Which fusion will occur higher in the dendrogram, or will they fuse at the same height, or is there not enough information to tell? Consider the following cases, and rigorously justify your conclusion. Here, $(x_i, y_i)$ represents an observation, where $x_1 \leq x_2 \leq x_3 \leq x_4 \leq x_5 \leq x_6$ and $y_1 < y_2 < y_3 < y_4 < y_5 < y_6$.
+\begin{itemize}
+\item[(a)] The distance metric is the Euclidean distance on the $x$-axis only;\\ 
+i.e., $\vert x_i - x_j \vert$.
+\item[(b)] The distance metric is the Euclidean distance on the $y$-axis only;\\ 
+i.e., $\vert y_i - y_j \vert$.
+\item[(c)] The distance metric is the $L_1$ distance;\\ 
+i.e., $\vert x_i - x_j \vert + \vert y_i - y_j \vert$.
+\end{itemize}
+
+\end{enumerate}
+\end{document}
