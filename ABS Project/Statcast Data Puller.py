@@ -13,6 +13,7 @@ data_path_desk2 = "C:/Users/Sean's Desktop/Documents/GitHub/pitch_data_test.csv"
 #Laptop File Paths
 data_path_lap1 = "C:/Users/clays/Documents/GitHub/pitch_data_current.csv"
 data_path_lap2 = "C:/Users/clays/Documents/GitHub/pitch_data_test.csv"
+data_path_lap3 = "C:/Users/clays/Documents/GitHub/pitch_data_full_test.csv"
 
 mlb_2026_start_date =  "2026-03-25"
 
