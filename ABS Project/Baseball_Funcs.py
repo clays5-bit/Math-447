@@ -7,7 +7,6 @@ from datetime import date, timedelta
 import pandas as pd
 import numpy as np
 
-
 def pull_pitch_statcast(data_path, start_day, end_day):
     current_data = statcast(start_dt = start_day, end_dt = end_day)
 
@@ -132,20 +131,37 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                     if (event["details"].get('hasReview')) and (not event.get('reviewDetails', {}).get('isOverturned')):
                         if strike:
                             strikes += 1
+                            umpire_call_strike = True
+                            umpire_call_ball = False
                         elif ball:
                             balls += 1
+                            umpire_call_strike = False
+                            umpire_call_ball = True
 
                     elif (event["details"].get('hasReview')) and (event.get('reviewDetails', {}).get('isOverturned')):
                         if strike:
                             balls += 1
+                            umpire_call_strike = False
+                            umpire_call_ball = True
+
                         elif ball:
                             strikes += 1
+                            umpire_call_strike = True
+                            umpire_call_ball = False
 
                     elif strike or ball:
                         if strike:
                             strikes += 1
+                            umpire_call_strike = True
+                            umpire_call_ball = False
                         elif ball:
                             balls += 1
+                            umpire_call_strike = False
+                            umpire_call_ball = True
+
+                    else:
+                        umpire_call_strike = False
+                        umpire_call_ball = False
 
                     row = {
                         "date": offDate,
@@ -158,6 +174,8 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         "pitching_team_id": pitching_team1id,
                         "pitcher_id": play.get('matchup', {}).get('pitcher', {}).get('id'),
                         "pitcher_name": play.get('matchup', {}).get('pitcher', {}).get('fullName'),
+                        "bat_hand": play.get('matchup', {}).get('batSide', {}).get('code',{}),
+                        "pitch_hand": play.get('matchup', {}).get('pitchHand', {}).get('code',{}),
 
                         #Modify to get prior count
                         #Count section
@@ -194,6 +212,8 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         #in the details section
                         "description": event["details"].get('description'),
                         "code": event["details"].get('code'),
+                        "umpire_call_strike": umpire_call_strike,
+                        "umpire_call_ball": umpire_call_ball,
                         "isStrike": event["details"].get('isStrike'),
                         "isBall": event["details"].get('isBall'),
                         "pitchTypeCode": event["details"].get('type', {}).get('code'),
