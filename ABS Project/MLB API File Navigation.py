@@ -22,26 +22,28 @@ rows = []
 data = stp.get('game', {'gamePk': schedule_ids[10]})
 
 #print(data.keys())
-#print(data.get('gameData', {}).get('teams',{}).get('away',{}).get('name',{}))
-#print(data.get('gameData', {}).get('teams',{}).get('home',{}).get('name',{}))
+print(data.get('gameData', {}).get('teams',{}).get('away',{}).get('name',{}))
+print(data.get('gameData', {}).get('teams',{}).get('home',{}).get('name',{}))
 
 allPlays = data["liveData"]["plays"]["allPlays"]
-print(data["liveData"]['plays'].keys())
 #print(allPlays.get('decisions', {}))
 
 
 
 for play in allPlays:
-    print(play.get('reviewDetails', {}))
+    if play.get('reviewDetails'):
+        print(play.get('reviewDetails', {}))
     for event in play["playEvents"]:
-        if(event.get('isSubstitution', {})):
-            n += 1
-            print(n)
-            print(event.keys())
-            print('Substitution')
-            print(event.get('details', {}))
-        elif(event.get('isPitch', {})):
-            n += 1
-            print(n)
-            print('Pitch')
-            print(event.get('details', {}))
+        if(event['details'].get('hasReview')):
+            print(event['details'])
+    #    if(event.get('isSubstitution', {})):
+    #        n += 1
+    #        print(n)
+    #        print(event.keys())
+    #        print('Substitution')
+    #        print(event.get('details', {}))
+    #    elif(event.get('isPitch', {})):
+    #        n += 1
+    #        print(n)
+    #        print('Pitch')
+    #        print(event.get('details', {}))
