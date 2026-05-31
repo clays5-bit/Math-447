@@ -19,11 +19,13 @@ data_path_lap3 = "C:/Users/clays/Documents/GitHub/pitch_data_full_test.csv"
 mlb_2026_start_date =  "2026-03-25"
 data_date = "2026-05-30"
 
+test_date = "2026-04-18"
+
 start_date = str(date.today()-timedelta(days=2))
 end_date = str(date.today()-timedelta(days=1))
 today = str(date.today())
 
 bf.pull_pitch_mlb_api(data_path_desk1, mlb_2026_start_date, data_date)
-#bf.pull_pitch_mlb_api(data_path_desk2, start_date, end_date)
+#bf.pull_pitch_mlb_api(data_path_desk2, test_date, test_date)
 #bf.pull_pitch_statcast(data_path_desk3, mlb_2026_start_date, today)
 #bf.update_pitch_file_mlb_api(data_path_lap2)

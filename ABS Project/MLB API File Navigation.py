@@ -27,16 +27,18 @@ print(data.get('gameData', {}).get('teams',{}).get('home',{}).get('name',{}))
 
 allPlays = data["liveData"]["plays"]["allPlays"]
 #print(allPlays.get('decisions', {}))
-
-
+print(type(allPlays))
+#print(allPlays.keys())
 
 for play in allPlays:
+    #print(play["result"]["eventType"])
     if play.get('reviewDetails'):
         print(play.get('reviewDetails', {}))
         #print(play.get('playEvents', {}))
     for event in play["playEvents"]:
         if(event['details'].get('hasReview')):
             print(event['details'])
+    #    print(event.get("isPitch"))
     #    if(event.get('isSubstitution', {})):
     #        n += 1
     #        print(n)

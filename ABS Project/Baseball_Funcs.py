@@ -101,13 +101,29 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
             balls = 0
             strikes = 0        
 
+            strikeout1 = False
+            walk1 = False
+
+            if play["result"]["eventType"] == 'strikeout':
+                strikeout1 = True
+            elif play["result"]["eventType"] == 'walk':
+                walk1 = True
+            
             for event in play["playEvents"]:
-                if event.get("isPitch"): #and event.get('details', {}).get('hasReview') #REMOVE
+                if event.get("isPitch"):
                     n += 1
                     print(n)
                     
+                    #Sorted Challenge by team rather than player
                     if event["details"].get('hasReview'):
                         if event.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
+                            challenge_batting = True
+                            challenge_fielding = False
+                        else:
+                            challenge_batting = False
+                            challenge_fielding = True
+                    elif play.get('reviewDetails',{}).get('player',{}):
+                        if play.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
                             challenge_batting = True
                             challenge_fielding = False
                         else:
@@ -128,26 +144,37 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         strike = False
                         ball = False
 
+                    isOverturned = False
+                    hasReview = False
+
+                    #Fix fo sho
                     if (event["details"].get('hasReview')) and (not event.get('reviewDetails', {}).get('isOverturned')):
                         if strike:
                             strikes += 1
                             umpire_call_strike = True
                             umpire_call_ball = False
+                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
+                            hasReview = True
                         elif ball:
                             balls += 1
                             umpire_call_strike = False
                             umpire_call_ball = True
+                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
+                            hasReview = True
 
                     elif (event["details"].get('hasReview')) and (event.get('reviewDetails', {}).get('isOverturned')):
                         if strike:
                             balls += 1
                             umpire_call_strike = False
                             umpire_call_ball = True
-
+                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
+                            hasReview = True
                         elif ball:
                             strikes += 1
                             umpire_call_strike = True
                             umpire_call_ball = False
+                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
+                            hasReview = True
 
                     elif strike or ball:
                         if strike:
@@ -162,6 +189,32 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                     else:
                         umpire_call_strike = False
                         umpire_call_ball = False
+
+                    strikeout = False
+                    walk = False
+                    
+                    if strikes >= 3 and strikeout1:
+                        strikeout = True
+                        if play.get('reviewDetails',{}).get('player',{}):
+                            isOverturned = play.get('reviewDetails',{}).get('isOverturned', {})
+                            if isOverturned:
+                                umpire_call_ball = True
+                                umpire_call_strike = False
+                            else:
+                                umpire_call_ball = False
+                                umpire_call_strike = True
+                            hasReview = True
+                    elif balls >= 4 and walk1:
+                        walk = True
+                        if play.get('reviewDetails',{}).get('player',{}):
+                            isOverturned = play.get('reviewDetails',{}).get('isOverturned', {})
+                            if isOverturned:
+                                umpire_call_ball = False
+                                umpire_call_strike = True
+                            else:
+                                umpire_call_ball = True
+                                umpire_call_strike = False
+                            hasReview = True
 
                     row = {
                         "date": offDate,
@@ -216,10 +269,12 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                         "umpire_call_ball": umpire_call_ball,
                         "isStrike": event["details"].get('isStrike'),
                         "isBall": event["details"].get('isBall'),
+                        "isStrikeout": strikeout,
+                        "isWalk": walk,
                         "pitchTypeCode": event["details"].get('type', {}).get('code'),
                         "pitchTypeDescription": event["details"].get('type', {}).get('description'),
-                        "hasReview": event["details"].get('hasReview'),
-                        "isOverturned": event.get('reviewDetails', {}).get('isOverturned'),
+                        "hasReview": hasReview,
+                        "isOverturned": isOverturned,
                         "batter_challenge": challenge_batting,
                         "fielder_challenge": challenge_fielding,
 
