@@ -31,22 +31,11 @@ print(type(allPlays))
 #print(allPlays.keys())
 
 for play in allPlays:
-    #print(play["result"]["eventType"])
-    if play.get('reviewDetails'):
-        print(play.get('reviewDetails', {}))
-        #print(play.get('playEvents', {}))
+    print('play')
+    print(play.keys())
+    print('boxscore')
+    print(data['liveData']['boxscore'].keys())
+    print(data['liveData']['boxscore'].get('info', {}))
     for event in play["playEvents"]:
-        if(event['details'].get('hasReview')):
-            print(event['details'])
-    #    print(event.get("isPitch"))
-    #    if(event.get('isSubstitution', {})):
-    #        n += 1
-    #        print(n)
-    #        print(event.keys())
-    #        print('Substitution')
-    #        print(event.get('details', {}))
-    #    elif(event.get('isPitch', {})):
-    #        n += 1
-    #        print(n)
-    #        print('Pitch')
-    #        print(event.get('details', {}))
+       print('event')
+       print(event.keys())
