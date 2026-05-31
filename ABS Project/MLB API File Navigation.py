@@ -19,7 +19,7 @@ schedule_ids = schedule_df['game_id'].to_list()
 n=0
 m=0
 rows = []
-data = stp.get('game', {'gamePk': schedule_ids[10]})
+data = stp.get('game', {'gamePk': schedule_ids[3]})
 
 #print(data.keys())
 print(data.get('gameData', {}).get('teams',{}).get('away',{}).get('name',{}))
@@ -33,6 +33,7 @@ allPlays = data["liveData"]["plays"]["allPlays"]
 for play in allPlays:
     if play.get('reviewDetails'):
         print(play.get('reviewDetails', {}))
+        #print(play.get('playEvents', {}))
     for event in play["playEvents"]:
         if(event['details'].get('hasReview')):
             print(event['details'])
