@@ -7,6 +7,7 @@ library(factoextra)
 rm(list=ls())
 
 #setwd("C:/Users/Sean's Desktop/Documents/GitHub")
+setwd("C:/Users/clays/Documents/GitHub")
 pitch_data_raw <- read.csv("pitch_data_current.csv")
 pitch_data_raw <- pitch_data_raw %>% select(-X)
 pitch_data_raw <- filter(pitch_data_raw, !(pitchTypeCode == ""))
