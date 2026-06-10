@@ -6,8 +6,8 @@ library(FactoMineR)
 library(factoextra)
 rm(list=ls())
 
-#setwd("C:/Users/Sean's Desktop/Documents/GitHub")
-setwd("C:/Users/clays/Documents/GitHub")
+setwd("C:/Users/Sean's Desktop/Documents/GitHub")
+#setwd("C:/Users/clays/Documents/GitHub")
 pitch_data_raw <- read.csv("pitch_data_current.csv")
 pitch_data_raw <- pitch_data_raw %>% select(-X)
 pitch_data_raw <- filter(pitch_data_raw, !(pitchTypeCode == ""))
@@ -96,6 +96,13 @@ count_table <- pitch_data_logistic %>%
   )
 
 print(count_table, n = Inf)
+
+
+
+
+lasso_model <- cv.glmnet(pitch_data_logistic$hasReview, pitch_data_logistic(-hasReview), alpha = 1, family = "binomial")
+
+set.set(50)
 
 
 

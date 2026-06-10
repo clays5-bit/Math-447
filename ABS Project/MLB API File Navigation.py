@@ -19,23 +19,19 @@ schedule_ids = schedule_df['game_id'].to_list()
 n=0
 m=0
 rows = []
-data = stp.get('game', {'gamePk': schedule_ids[3]})
+data = stp.get('game', {'gamePk': schedule_ids[5]})
 
 #print(data.keys())
 print(data.get('gameData', {}).get('teams',{}).get('away',{}).get('name',{}))
 print(data.get('gameData', {}).get('teams',{}).get('home',{}).get('name',{}))
 
 allPlays = data["liveData"]["plays"]["allPlays"]
-#print(allPlays.get('decisions', {}))
-print(type(allPlays))
+#print(type(allPlays))
 #print(allPlays.keys())
 
 for play in allPlays:
     print('play')
-    print(play.keys())
-    print('boxscore')
-    print(data['liveData']['boxscore'].keys())
-    print(data['liveData']['boxscore'].get('info', {}))
     for event in play["playEvents"]:
-       print('event')
-       print(event.keys())
+        print(event.keys())
+        print(event.get('reviewDetails'))
+        print(event.get('type'))
