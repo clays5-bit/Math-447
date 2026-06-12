@@ -29,9 +29,10 @@ allPlays = data["liveData"]["plays"]["allPlays"]
 #print(type(allPlays))
 #print(allPlays.keys())
 
-for play in allPlays:
-    print('play')
-    for event in play["playEvents"]:
-        print(event.keys())
-        print(event.get('reviewDetails'))
-        print(event.get('type'))
+data = stp.get('game', {'gamePk': schedule_ids[5]})
+play = data["liveData"]["plays"]["allPlays"][2]  # first at bat
+for event in play["playEvents"]:
+    if event.get("isPitch"):
+        print(event.get("count"))
+        print(event["details"].get("description"))
+        print("---")

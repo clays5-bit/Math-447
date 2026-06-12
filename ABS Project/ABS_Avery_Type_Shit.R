@@ -1,8 +1,15 @@
+library(dplyr)
+library(fastDummies)
+library(glmnet)
+library(car)
+library(FactoMineR)
+library(factoextra)
+library(ggplot2)
+library(caret)
 
 ump_review <- pitch_data_raw[, c("umpire", "umpire_call_strike", "isStrike", "hasReview", "isOverturned", "pX", "pZ")] %>% filter(hasReview == TRUE)
 umpreviewstrike <- ump_review %>% filter(umpire_call_strike == "True") %>% filter(isOverturned == "False")
 umpreviewSoverturned <- ump_review %>% filter(umpire_call_strike == "True") %>% filter(isOverturned == "True")
-
 
 average_strikeTop <- (sum(pitch_data_raw$strikeZoneTop)/length(pitch_data_raw$strikeZoneTop))
 average_strikeBottom <- (sum(pitch_data_raw$strikeZoneBottom)/length(pitch_data_raw$strikeZoneBottom))

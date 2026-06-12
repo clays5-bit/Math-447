@@ -1,9 +1,5 @@
 library(dplyr)
-library(fastDummies)
 library(glmnet)
-library(car)
-library(FactoMineR)
-library(factoextra)
 
 #-------------------------------------------------------------------------------------------------------#
 fit.glm <- glm(hasReview ~ ., data = pitch_data_logistic, family = 'binomial')

@@ -36,7 +36,6 @@ def add_pitch_statcast(data_path, start_day, end_day):
     current_data.to_csv(data_path, index=False)
 
 def pull_pitch_mlb_api(data_path, start_day, end_day):
-    print("Running Updated Version")
     schedule = stp.schedule(start_date=start_day, end_date=end_day)
     schedule_df = pd.DataFrame(schedule)
     schedule_ids = schedule_df['game_id'].to_list()
@@ -117,14 +116,14 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                     
                     #Sorted Challenge by team rather than player
                     if event["details"].get('hasReview'):
-                        if event.get('reviewDetails', {}).get('challengeTeamId') == batting_team1id:
+                        if event.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
                             challenge_batting = True
                             challenge_fielding = False
                         else:
                             challenge_batting = False
                             challenge_fielding = True
                     elif play.get('reviewDetails',{}).get('player',{}):
-                        if play.get('reviewDetails', {}).get('challengeTeamId') == batting_team1id:
+                        if play.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
                             challenge_batting = True
                             challenge_fielding = False
                         else:
@@ -201,6 +200,8 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                             if isOverturned:
                                 umpire_call_ball = True
                                 umpire_call_strike = False
+                                ball += 1
+                                strike -= 1
                             else:
                                 umpire_call_ball = False
                                 umpire_call_strike = True
@@ -235,16 +236,15 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
 
                         #Modify to get prior count
                         #Count section
-                        "balls": event.get('count', {}).get('balls', {}),
-                        "strikes": event.get('count', {}).get('strikes', {}),
+                        "balls": balls,
+                        "strikes": strikes,
                         "outs": event["count"].get('outs'),
                     
                         #Modify to get prior score
                         #Score information
                         "awayTeamRuns": awayTeamRuns,
                         "homeTeamRuns": homeTeamRuns,
-                        "score_diff_away": awayTeamRuns-homeTeamRuns,
-                        "score_diff_home": homeTeamRuns-awayTeamRuns,
+                        "score_diff": awayTeamRuns-homeTeamRuns,
 
                         "inning": inning,
                         "topInning": topInning,
