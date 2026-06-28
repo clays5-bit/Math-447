@@ -109,4 +109,7 @@ coef(lasso_model_batter, s = lasso_model_batter$lambda.1se)
 
 coef(lasso_model_hasReview, s = lasso_model_hasReview$lambda.min)
 coef(lasso_model_fielder, s = lasso_model_fielder$lambda.min)
-coef(lasso_model_batter, s = lasso_model_fielder$lambda.min)
+coef(lasso_model_batter, s = lasso_model_batter$lambda.min)
+
+predict_hasReview <- predict(lasso_model_hasReview, s = lasso_model_hasReview$lambda.1se, newx = pitch_data_hasReview, type = 'response')
+predict_hasReview <- predict(lasso_model_hasReview, s = lasso_model_hasReview$lambda.1se, newx = pitch_data_hasReview, type = 'response')

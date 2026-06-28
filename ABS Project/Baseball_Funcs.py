@@ -66,11 +66,11 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
             if officialNo.get("officialType") == "Home Plate":
                 home_umpire = officialNo.get('official', {}).get('fullName')
     
-        batting_team1 = data.get('gameData').get('teams').get('away').get('name')
-        batting_team2 = batting_team1
+        batting_team = data.get('gameData').get('teams').get('away').get('name')
+        team_change = batting_team
 
         for play in allPlays:
-            if batting_team2 is not batting_team1:
+            if team_change != batting_team:
                 runOn1id = None
                 runOn1Name = None
 
@@ -85,115 +85,95 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                 runOn3 = False
 
             if play.get('about').get('isTopInning'):
-                batting_team1 = data.get('gameData').get('teams').get('away').get('name')
-                batting_team1id = data.get('gameData').get('teams').get('away').get('id')
-                pitching_team1 = data.get('gameData').get('teams').get('home').get('name')
-                pitching_team1id = data.get('gameData').get('teams').get('home').get('id')
+                batting_team = data.get('gameData').get('teams').get('away').get('name')
+                batting_teamid = data.get('gameData').get('teams').get('away').get('id')
+                pitching_team = data.get('gameData').get('teams').get('home').get('name')
+                pitching_teamid = data.get('gameData').get('teams').get('home').get('id')
             else:
-                batting_team1 = data.get('gameData').get('teams').get('home').get('name')
-                batting_team1id = data.get('gameData').get('teams').get('home').get('id')
-                pitching_team1 = data.get('gameData').get('teams').get('away').get('name')
-                pitching_team1id = data.get('gameData').get('teams').get('away').get('id')
+                batting_team = data.get('gameData').get('teams').get('home').get('name')
+                batting_teamid = data.get('gameData').get('teams').get('home').get('id')
+                pitching_team = data.get('gameData').get('teams').get('away').get('name')
+                pitching_teamid = data.get('gameData').get('teams').get('away').get('id')
         
             inning = play.get('about', {}).get('inning')
             topInning = play.get('about', {}).get('isTopInning')
 
-            balls = 0
-            strikes = 0        
+            ball_initial = 0
+            strike_initial = 0        
 
-            strikeout1 = False
-            walk1 = False
+            strikeout_end_of_play = False
+            walk_end_of_play = False
 
             if play["result"]["eventType"] == 'strikeout':
-                strikeout1 = True
+                strikeout_end_of_play = True
             elif play["result"]["eventType"] == 'walk':
-                walk1 = True
+                walk_end_of_play = True
             
+            if play.get('reviewDetails',{}).get('player',{}):
+                if play.get('reviewDetails', {}).get('challengeTeamId') == batting_teamid:
+                    challenge_batting_end_of_play = True
+                    challenge_fielding_end_of_play = False
+                else:
+                    challenge_batting_end_of_play = False
+                    challenge_fielding_end_of_play = True
+            else:
+                challenge_batting_end_of_play = False
+                challenge_fielding_end_of_play = False
+
             for event in play["playEvents"]:
                 if event.get("isPitch"):
                     n += 1
                     print(n)
                     
-                    #Sorted Challenge by team rather than player
-                    if event["details"].get('hasReview'):
-                        if event.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
-                            challenge_batting = True
-                            challenge_fielding = False
-                        else:
-                            challenge_batting = False
-                            challenge_fielding = True
-                    elif play.get('reviewDetails',{}).get('player',{}):
-                        if play.get('reviewDetails', {}).get('challengeTeamId') is batting_team1id:
-                            challenge_batting = True
-                            challenge_fielding = False
-                        else:
-                            challenge_batting = False
-                            challenge_fielding = True
-                    else:
-                        challenge_batting = False
-                        challenge_fielding = False
+                    umpire_call_strike = False
+                    umpire_call_ball = False
 
                     description = event["details"].get('description')
                     if ("Strike" in description) or (("Foul" in description) and (strikes < 2)):
-                        strike = True
-                        ball = False
+                        strike_final_call = True
+                        ball_final_call = False
                     elif "Ball" in description:
-                        strike = False
-                        ball = True 
+                        strike_final_call = False
+                        ball_final_call = True 
                     else:
-                        strike = False
-                        ball = False
+                        strike_final_call = False
+                        ball_final_call = False
 
-                    isOverturned = False
-                    hasReview = False
-
-                    #Fix fo sho
-                    if (event["details"].get('hasReview')) and (not event.get('reviewDetails', {}).get('isOverturned')):
-                        if strike:
-                            strikes += 1
+                    #logic tree for calls at the plate
+                    if event["reviewDetails"].get('player', {}):
+                        if event.get('reviewDetails', {}).get('isOverturned'):
+                            isOverturned = True
+                            if strike_final_call:
+                                ball_initial += 1
+                                umpire_call_ball = True
+                            elif ball_final_call:
+                                strike_initial += 1
+                                umpire_call_strike = True
+                        else:
+                            isOverturned = False
+                            if strike_final_call:
+                                strike_initial += 1
+                                umpire_call_strike = False
+                            elif ball_final_call:
+                                ball_final_call += 1
+                                umpire_call_ball = True
+                    
+                    elif strike_final_call or ball_final_call:
+                        if strike_final_call:
+                            strike_initial += 1
                             umpire_call_strike = True
-                            umpire_call_ball = False
-                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
-                            hasReview = True
-                        elif ball:
-                            balls += 1
-                            umpire_call_strike = False
-                            umpire_call_ball = True
-                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
-                            hasReview = True
-
-                    elif (event["details"].get('hasReview')) and (event.get('reviewDetails', {}).get('isOverturned')):
-                        if strike:
-                            balls += 1
-                            umpire_call_strike = False
-                            umpire_call_ball = True
-                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
-                            hasReview = True
-                        elif ball:
-                            strikes += 1
-                            umpire_call_strike = True
-                            umpire_call_ball = False
-                            isOverturned = event.get('reviewDetails', {}).get('isOverturned')
-                            hasReview = True
-
-                    elif strike or ball:
-                        if strike:
-                            strikes += 1
-                            umpire_call_strike = True
-                            umpire_call_ball = False
-                        elif ball:
-                            balls += 1
-                            umpire_call_strike = False
+                        elif ball_final_call:
+                            ball_initial += 1
                             umpire_call_ball = True
 
-                    else:
-                        umpire_call_strike = False
-                        umpire_call_ball = False
-
+                    #strikeout and walks
                     strikeout = False
                     walk = False
                     
-                    if strikes >= 3 and strikeout1:
+                    if play.get('reviewDetails',{}).get('player',{}):
+                        isOverturned = play.get('reviewDetails',{}).get('isOverturned', {})
+
+                    if strikes >= 3 and strikeout_end_of_play:
                         strikeout = True
                         if play.get('reviewDetails',{}).get('player',{}):
                             isOverturned = play.get('reviewDetails',{}).get('isOverturned', {})
@@ -204,7 +184,7 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                                 umpire_call_ball = False
                                 umpire_call_strike = True
                             hasReview = True
-                    elif balls >= 4 and walk1:
+                    elif balls >= 4 and walk_end_of_play:
                         walk = True
                         if play.get('reviewDetails',{}).get('player',{}):
                             isOverturned = play.get('reviewDetails',{}).get('isOverturned', {})
@@ -216,15 +196,37 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
                                 umpire_call_strike = False
                             hasReview = True
 
+                    #Sorted Challenge by team rather than player
+                    if event["details"].get('hasReview'):
+                        if event.get('reviewDetails', {}).get('challengeTeamId') == batting_teamid:
+                            challenge_batting = True
+                            challenge_fielding = False
+                        else:
+                            challenge_batting = False
+                            challenge_fielding = True
+                    elif play.get('reviewDetails',{}).get('player',{}):
+                        if play.get('reviewDetails', {}).get('challengeTeamId') == batting_teamid:
+                            challenge_batting = True
+                            challenge_fielding = False
+                        else:
+                            challenge_batting = False
+                            challenge_fielding = True
+                    else:
+                        challenge_batting = False
+                        challenge_fielding = False
+
+                    isOverturned = False
+                    hasReview = False
+
                     row = {
                         "date": offDate,
-                        "batting_team": batting_team1,
-                        "batting_team_id": batting_team1id,
+                        "batting_team": batting_team,
+                        "batting_team_id": batting_teamid,
                         "batter_id": play.get('matchup', {}).get('batter', {}).get('id'),
                         "batter_name": play.get('matchup', {}).get('batter', {}).get('fullName'),
 
-                        "pitching_team": pitching_team1,
-                        "pitching_team_id": pitching_team1id,
+                        "pitching_team": pitching_team,
+                        "pitching_team_id": pitching_teamid,
                         "pitcher_id": play.get('matchup', {}).get('pitcher', {}).get('id'),
                         "pitcher_name": play.get('matchup', {}).get('pitcher', {}).get('fullName'),
                         "bat_hand": play.get('matchup', {}).get('batSide', {}).get('code',{}),
@@ -232,8 +234,8 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
 
                         #Modify to get prior count
                         #Count section
-                        "balls": balls,
-                        "strikes": strikes,
+                        "balls": ball_initial,
+                        "strikes": strike_initial,
                         "outs": event["count"].get('outs'),
                     
                         #Modify to get prior score
@@ -301,7 +303,6 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
 
                         'zone': event["pitchData"].get('zone'),
                         'plateTime': event["pitchData"].get('plateTime'),
-                        'plateTime': event["pitchData"].get('extension')
                     }
                     rows.append(row)
                     balls = event["count"].get('balls')
@@ -323,7 +324,7 @@ def pull_pitch_mlb_api(data_path, start_day, end_day):
             runOn1 = play.get('matchup', {}).get('postOnFirst', {}).get('id') is not None
             runOn2 = play.get('matchup', {}).get('postOnSecond', {}).get('id') is not None
             runOn3 = play.get('matchup', {}).get('postOnThird', {}).get('id') is not None
-            batting_team2 = batting_team1
+            team_change = batting_team
 
     ultimateBaseballData = pd.DataFrame(rows)
     ultimateBaseballData.to_csv(data_path)
